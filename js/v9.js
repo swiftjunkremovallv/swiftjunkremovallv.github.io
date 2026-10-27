@@ -197,6 +197,46 @@
     list.classList.add('live');
   }
 
+  /* before / after loop: the clutter is swept away, then comes back */
+  var lp = $('#loop');
+  if (lp && !reduce) {
+    var imgs = [$('.lp-a', lp), $('.lp-b', lp)], stripes = $$('.lp-s', lp), tag = $('.lp-tag', lp);
+    var LD = 14, LG = 3, HOLD2 = 3200, SWEEP = 1700, top = 0, running = false, timer = 0, raf = 0;
+    var edge = function (e) { return 'polygon(' + e + '% 0,100% 0,100% 100%,' + e + '% 100%,' + (e + LD) + '% 50%)'; };
+    var paintLoop = function (E) {
+      imgs[top].style.clipPath = edge(E);
+      stripes.forEach(function (s, i) {
+        var e = E - (stripes.length - i) * LG;
+        s.style.clipPath = edge(e);
+      });
+    };
+    var resetLoop = function () {
+      imgs[top].style.zIndex = 5; imgs[1 - top].style.zIndex = 1;
+      imgs[1 - top].style.clipPath = 'none';
+      paintLoop(-LD - 1);
+    };
+    var sweepLoop = function () {
+      var t0 = performance.now(), swapped = false;
+      raf = requestAnimationFrame(function step(now) {
+        var k = Math.min(1, (now - t0) / SWEEP);
+        var ease = k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
+        paintLoop(-LD - 1 + ease * (100 + LD + 1 + LG * 3 + LD));
+        if (k > 0.45 && !swapped) { swapped = true; tag.classList.add('swap'); setTimeout(function () { tag.textContent = top === 0 ? 'After' : 'Before'; tag.classList.remove('swap'); }, 250); }
+        if (k < 1) { raf = requestAnimationFrame(step); return; }
+        top = 1 - top; resetLoop();
+        if (running) timer = setTimeout(sweepLoop, HOLD2);
+      });
+    };
+    resetLoop();
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (es) {
+        var on = es[0].isIntersecting;
+        if (on && !running) { running = true; timer = setTimeout(sweepLoop, 1800); }
+        else if (!on && running) { running = false; clearTimeout(timer); }
+      }, { threshold: 0.35 }).observe(lp);
+    }
+  }
+
   /* faq accordion: one open at a time */
   $$('.acc-q').forEach(function (b) {
     b.addEventListener('click', function () {

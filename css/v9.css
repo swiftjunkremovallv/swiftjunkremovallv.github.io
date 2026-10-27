@@ -395,3 +395,16 @@ html.intro-on{overflow:hidden}
   .fact span{font-size:13px;line-height:1.3}
   .ticker{padding-block:26px 30px}
 }
+
+/* ---------- before/after loop ---------- */
+.loop{position:relative;isolation:isolate}
+.loop img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:none}
+.card:hover .loop img{transform:none}
+.lp-a{z-index:5}
+.lp-b{z-index:1}
+.lp-s{position:absolute;inset:0;pointer-events:none;clip-path:polygon(-14% 0,0 50%,-14% 100%,100% 100%,100% 0)}
+.lp-s.s1{z-index:2;background:#f3c9a8}
+.lp-s.s2{z-index:3;background:#e8955c}
+.lp-s.s3{z-index:4;background:#101c33}
+.lp-tag{position:absolute;z-index:6;left:14px;top:14px;padding:7px 14px;border-radius:999px;font-size:13.5px;font-weight:600;letter-spacing:.01em;color:var(--navy);background:rgba(255,255,255,.88);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);box-shadow:0 6px 18px -8px rgba(16,28,51,.4);transition:opacity .35s}
+.lp-tag.swap{opacity:0}
