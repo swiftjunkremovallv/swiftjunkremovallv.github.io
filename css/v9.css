@@ -459,3 +459,6 @@ html.intro-on{overflow:hidden}
 @media (max-width:520px){
   .foot-cols{grid-template-columns:1fr 1fr;gap:24px}
 }
+
+/* full crew photo: keep the whole group in frame on phones */
+@media (max-width:720px){.hero-media{height:auto;min-height:0;aspect-ratio:3/2}.hero-media img{object-position:50% 50%}}
