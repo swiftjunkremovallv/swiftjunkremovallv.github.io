@@ -384,3 +384,14 @@ html.intro-on{overflow:hidden}
 @media (min-width:700px) and (max-width:980px){
   .rows{grid-template-columns:repeat(3,1fr)}
 }
+
+/* ---------- facts: compact cards on small screens ---------- */
+@media (max-width:980px){
+  .facts{background:var(--paper);border-bottom:0}
+  .facts-in{grid-template-columns:1fr 1fr;gap:10px;padding-block:22px 6px}
+  .fact,.fact+.fact,.fact:nth-child(3),.fact:nth-child(n+3){position:relative;padding:14px 14px 14px 38px;border:0;border-radius:16px;background:var(--white);box-shadow:0 1px 0 var(--line),0 12px 24px -20px rgba(16,28,51,.35);gap:1px;justify-content:center}
+  .fact::before{content:"";position:absolute;left:15px;top:50%;width:10px;height:6px;margin-top:-5px;border-left:2px solid var(--orange);border-bottom:2px solid var(--orange);transform:translateY(-35%) rotate(-45deg)}
+  .fact strong{font-size:16.5px;letter-spacing:-.01em;line-height:1.2}
+  .fact span{font-size:13px;line-height:1.3}
+  .ticker{padding-block:26px 30px}
+}
