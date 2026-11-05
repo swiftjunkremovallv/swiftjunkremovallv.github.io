@@ -140,6 +140,56 @@
       else if (d.length > 3) o = '(' + d.slice(0, 3) + ') ' + d.slice(3);
       phoneIn.value = o;
     });
+    /* what needs to go: dropdown */
+    var dd = $('#dd'), ddBtn = $('#ddBtn'), ddPanel = $('#ddPanel'), ddVal = $('#ddVal');
+    function ddShut() { ddPanel.hidden = true; ddBtn.setAttribute('aria-expanded', 'false'); dd.classList.remove('open'); }
+    ddBtn.addEventListener('click', function () {
+      var open = ddPanel.hidden;
+      ddPanel.hidden = !open; ddBtn.setAttribute('aria-expanded', String(open)); dd.classList.toggle('open', open);
+    });
+    ddPanel.addEventListener('change', function () {
+      var v = $$('input[name=item]:checked', rq).map(function (c) { return c.value; });
+      ddVal.textContent = v.length ? v.join(', ') : 'Select all that apply';
+      ddVal.classList.toggle('has', v.length > 0);
+    });
+    document.addEventListener('click', function (e) { if (!dd.contains(e.target)) ddShut(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !ddPanel.hidden) { ddShut(); ddBtn.focus(); } });
+
+    /* photos: shrunk in the browser so the email stays small */
+    var photos = [], pIn = $('#rqPhoto'), thumbs = $('#thumbs'), hint = $('#photoHint'), MAXP = 5;
+    $('#photoAdd').addEventListener('click', function () { pIn.click(); });
+    function shrink(file, done) {
+      var url = URL.createObjectURL(file), im = new Image();
+      im.onload = function () {
+        var k = Math.min(1, 1600 / Math.max(im.width, im.height)), c = document.createElement('canvas');
+        c.width = Math.round(im.width * k); c.height = Math.round(im.height * k);
+        c.getContext('2d').drawImage(im, 0, 0, c.width, c.height);
+        c.toBlob(function (b) { done(b, url); }, 'image/jpeg', 0.8);
+      };
+      im.onerror = function () { URL.revokeObjectURL(url); done(null); };
+      im.src = url;
+    }
+    function drawThumbs() {
+      thumbs.innerHTML = '';
+      photos.forEach(function (p, i) {
+        var li = document.createElement('li'), img = document.createElement('img'), x = document.createElement('button');
+        img.src = p.url; img.alt = 'Attached photo ' + (i + 1);
+        x.type = 'button'; x.textContent = '\u00d7'; x.setAttribute('aria-label', 'Remove photo ' + (i + 1));
+        x.addEventListener('click', function () { URL.revokeObjectURL(p.url); photos.splice(i, 1); drawThumbs(); });
+        li.appendChild(img); li.appendChild(x); thumbs.appendChild(li);
+      });
+      hint.textContent = photos.length ? photos.length + ' of ' + MAXP + ' photos added' : 'Optional. Up to 5 photos help us quote faster.';
+    }
+    pIn.addEventListener('change', function () {
+      var files = Array.prototype.slice.call(pIn.files).slice(0, MAXP - photos.length), n = files.length;
+      if (!n) { pIn.value = ''; return; }
+      files.forEach(function (f) {
+        shrink(f, function (b, url) {
+          if (b) photos.push({ blob: b, url: url });
+          if (--n === 0) { drawThumbs(); pIn.value = ''; }
+        });
+      });
+    });
     $$('input', rq).forEach(function (i) { i.addEventListener('input', function () { i.classList.remove('bad'); err.hidden = true; }); });
     rq.addEventListener('submit', function (e) {
       e.preventDefault();
@@ -155,17 +205,19 @@
       }
       var items = $$('input[name=item]:checked', rq).map(function (c) { return c.value; });
       var fd = new FormData(rq);
-      fd.delete('item'); fd.delete('kind'); fd.delete('zip'); fd.delete('message');
+      fd.delete('item'); fd.delete('kind'); fd.delete('address'); fd.delete('message');
       fd.set('Job type', rq.querySelector('input[name=kind]:checked').value);
       fd.set('What needs to go', items.join(', ') || 'Not specified');
       fd.set('Details', f.message.value.trim() || 'None');
-      fd.set('ZIP or neighborhood', f.zip.value.trim() || 'Not given');
+      fd.set('Address', f.address.value.trim() || 'Not given');
+      photos.forEach(function (p, i) { fd.append('attachment', p.blob, 'photo-' + (i + 1) + '.jpg'); });
       btn.disabled = true; btn.firstElementChild.textContent = 'Sending...';
       fetch('https://formsubmit.co/ajax/swift-junkremoval@outlook.com', {
         method: 'POST', headers: { Accept: 'application/json' }, body: fd
       }).then(function (r) { if (!r.ok) throw new Error('bad'); return r.json(); }).then(function () {
         $('#rqThanks').textContent = 'Thank you, ' + name.split(' ')[0] + '. We have your request.';
         $('.rq-form', rq).hidden = true; $('#rqDone').hidden = false;
+        rq.scrollIntoView({ block: 'center', behavior: 'smooth' });
       }).catch(function () {
         btn.disabled = false; btn.firstElementChild.textContent = 'Request a call back';
         err.textContent = 'That did not go through. Please call or text (702) 929-6544 and we will take it from there.';

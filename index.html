@@ -184,20 +184,35 @@
             <label class="fld"><span>Phone</span><input name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="(702)" required></label>
           </div>
 
-          <fieldset class="chips">
-            <legend>What needs to go?</legend>
-            <label><input type="checkbox" name="item" value="Furniture"><span>Furniture</span></label>
-            <label><input type="checkbox" name="item" value="Appliances"><span>Appliances</span></label>
-            <label><input type="checkbox" name="item" value="Yard debris"><span>Yard debris</span></label>
-            <label><input type="checkbox" name="item" value="Construction"><span>Construction</span></label>
-            <label><input type="checkbox" name="item" value="Cleanout"><span>Cleanout</span></label>
-            <label><input type="checkbox" name="item" value="Office"><span>Office</span></label>
-            <label><input type="checkbox" name="item" value="Other"><span>Other</span></label>
-            <label><input type="checkbox" name="item" value="Not sure"><span>Not sure</span></label>
-          </fieldset>
+          <label class="fld"><span>Address <i>(optional)</i></span><input name="address" autocomplete="street-address" placeholder="Street, city"></label>
 
-          <label class="fld"><span>Tell us about the job <i>(optional)</i></span><textarea name="message" rows="3" placeholder="What you have, where it is, any stairs or tight access, when you need it gone."></textarea></label>
-          <label class="fld"><span>ZIP or neighborhood <i>(optional)</i></span><input name="zip" autocomplete="postal-code"></label>
+          <div class="dd" id="dd">
+            <span class="dd-lab" id="ddLab">What needs to go?</span>
+            <button class="dd-btn" type="button" id="ddBtn" aria-haspopup="true" aria-expanded="false" aria-labelledby="ddLab ddVal"><span class="dd-val" id="ddVal">Select all that apply</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            <div class="dd-panel" id="ddPanel" role="group" aria-labelledby="ddLab" hidden>
+              <label><input type="checkbox" name="item" value="Furniture"><span>Furniture</span></label>
+              <label><input type="checkbox" name="item" value="Mattresses"><span>Mattresses</span></label>
+              <label><input type="checkbox" name="item" value="Appliances"><span>Appliances</span></label>
+              <label><input type="checkbox" name="item" value="Yard debris"><span>Yard debris</span></label>
+              <label><input type="checkbox" name="item" value="Construction"><span>Construction</span></label>
+              <label><input type="checkbox" name="item" value="Cleanout"><span>Cleanout</span></label>
+              <label><input type="checkbox" name="item" value="Office"><span>Office</span></label>
+              <label><input type="checkbox" name="item" value="Electronics"><span>Electronics</span></label>
+              <label><input type="checkbox" name="item" value="Other"><span>Other</span></label>
+              <label><input type="checkbox" name="item" value="Not sure"><span>Not sure</span></label>
+            </div>
+          </div>
+
+          <div class="fld msg">
+            <label for="rqMsg"><span>Tell us about the job <i>(optional)</i></span></label>
+            <textarea id="rqMsg" name="message" rows="3" placeholder="What you have, where it is, any stairs or tight access, when you need it gone."></textarea>
+            <div class="photo">
+              <input type="file" id="rqPhoto" accept="image/*" multiple hidden>
+              <button class="photo-add" type="button" id="photoAdd"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h3l1.5-2h7L17 8h3v11H4zM12 17a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg><span>Add photos</span></button>
+              <span class="photo-hint" id="photoHint">Optional. Up to 5 photos help us quote faster.</span>
+              <ul class="thumbs" id="thumbs"></ul>
+            </div>
+          </div>
           <input type="text" name="_honey" tabindex="-1" autocomplete="off" class="hp" aria-hidden="true">
           <input type="hidden" name="_subject" value="New request - Swift Junk Removal">
           <input type="hidden" name="_template" value="table">
