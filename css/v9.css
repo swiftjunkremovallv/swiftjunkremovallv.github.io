@@ -459,3 +459,13 @@ html.intro-on{overflow:hidden}
 @media (max-width:520px){
   .foot-cols{grid-template-columns:1fr 1fr;gap:24px}
 }
+
+/* text-to-us form */
+.rq-go svg{width:20px;height:20px}
+.rq-msg{width:100%;max-width:26em;margin:2px 0;padding:14px 16px;text-align:left;white-space:pre-wrap;word-break:break-word;font:inherit;font-size:15px;line-height:1.5;color:var(--ink);background:var(--paper);border:1.5px dashed var(--line);border-radius:14px}
+.rq-done .btn-light{background:var(--white);color:var(--ink);border:1.5px solid var(--line)}
+.rq-done .btn-light:hover{background:var(--paper);color:var(--ink)}
+.rq-done .btn svg{width:20px;height:20px}
+.rq-tip{font-size:14.5px}
+.rq-edit{font:inherit;font-size:14.5px;font-weight:600;color:var(--muted);background:none;border:0;border-bottom:1.5px solid var(--line);padding:2px 0;cursor:pointer}
+.rq.desk #rqSms,.rq.desk .rq-tip{display:none}

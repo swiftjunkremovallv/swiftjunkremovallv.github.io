@@ -169,10 +169,10 @@
     </div>
 
     <div class="proc-right reveal" style="--d:.1s">
-      <form class="rq" id="rq" method="POST" action="https://formsubmit.co/swift-junkremoval@outlook.com" aria-label="Junk removal request" novalidate>
+      <form class="rq" id="rq" aria-label="Text us your junk removal request" novalidate>
         <div class="rq-form">
-          <h3>Rather write? Send us the details.</h3>
-          <p class="rq-sub">We will call you back to talk it through.</p>
+          <h3>Rather write? Text us the details.</h3>
+          <p class="rq-sub">Fill this in and it becomes a text message to us. Your Messages app opens with it typed out, and you press send.</p>
 
           <div class="seg" role="radiogroup" aria-label="Type of job">
             <label><input type="radio" name="kind" value="Home" checked><span>Home</span></label>
@@ -181,7 +181,7 @@
 
           <div class="rq-row">
             <label class="fld"><span>Name</span><input name="name" autocomplete="name" required></label>
-            <label class="fld"><span>Phone</span><input name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="(702)" required></label>
+            <label class="fld"><span>Phone <i>(optional)</i></span><input name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="(702)"></label>
           </div>
 
           <fieldset class="chips">
@@ -198,20 +198,21 @@
 
           <label class="fld"><span>Tell us about the job <i>(optional)</i></span><textarea name="message" rows="3" placeholder="What you have, where it is, any stairs or tight access, when you need it gone."></textarea></label>
           <label class="fld"><span>ZIP or neighborhood <i>(optional)</i></span><input name="zip" autocomplete="postal-code"></label>
-          <input type="text" name="_honey" tabindex="-1" autocomplete="off" class="hp" aria-hidden="true">
-          <input type="hidden" name="_subject" value="New request - Swift Junk Removal">
-          <input type="hidden" name="_template" value="table">
-          <input type="hidden" name="_captcha" value="false">
 
           <p class="rq-err" id="rqErr" role="alert" hidden></p>
-          <button class="btn btn-accent btn-lg rq-go" type="submit"><span>Request a call back</span><svg><use href="#arrow"/></svg></button>
-          <p class="rq-alt">Or call <a href="tel:+17029296544">(702) 929-6544</a> to talk right now.</p>
+          <button class="btn btn-accent btn-lg rq-go" type="submit"><svg><use href="#msg"/></svg><span>Text this to us</span></button>
+          <p class="rq-alt">This sends a text message to (702) 929-6544. Prefer to talk? <a href="tel:+17029296544">Call us instead</a>.</p>
         </div>
 
         <div class="rq-done" id="rqDone" hidden>
           <svg class="tick" viewBox="0 0 52 52" aria-hidden="true"><circle cx="26" cy="26" r="24" fill="none" stroke="#c9520f" stroke-width="2.5"/><path d="M15 27l8 8 14-16" fill="none" stroke="#c9520f" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <h3 id="rqThanks">Thank you. We have your request.</h3>
-          <p>Our team will call you back to talk through the job. Need us sooner? Call <a href="tel:+17029296544">(702) 929-6544</a>.</p>
+          <h3 id="rqThanks">Your text is ready. Press send.</h3>
+          <p id="rqHow">Your Messages app should have opened with this typed out. Press <strong>send</strong> to text it to Swift Junk Removal. We do not receive it until you do.</p>
+          <pre class="rq-msg" id="rqPreview"></pre>
+          <a class="btn btn-accent btn-lg" id="rqSms" href="sms:+17029296544"><svg><use href="#msg"/></svg>Open Messages</a>
+          <button class="btn btn-light rq-copy" type="button" id="rqCopy">Copy the message</button>
+          <p class="rq-tip">Tip: tap the + in Messages to add photos of the job. They help us price it faster.</p>
+          <button class="rq-edit" type="button" id="rqEdit">Change my details</button>
         </div>
       </form>
     </div>

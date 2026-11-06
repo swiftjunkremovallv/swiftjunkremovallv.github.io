@@ -141,37 +141,50 @@
       phoneIn.value = o;
     });
     $$('input', rq).forEach(function (i) { i.addEventListener('input', function () { i.classList.remove('bad'); err.hidden = true; }); });
+    var SMS = '+17029296544', phoneOn = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    function smsHref(body) { return 'sms:' + SMS + '?&body=' + encodeURIComponent(body); }
     rq.addEventListener('submit', function (e) {
       e.preventDefault();
       var f = rq.elements, name = f.name.value.trim(), digits = f.phone.value.replace(/\D/g, '');
-      if (f._honey.value) return;
       var bad = [];
       if (!name) bad.push(f.name);
-      if (digits.length < 10) bad.push(f.phone);
+      if (digits.length && digits.length < 10) bad.push(f.phone);
       if (bad.length) {
         bad.forEach(function (i) { i.classList.add('bad'); });
-        err.textContent = !name ? 'Please add your name and a phone number we can reach you on.' : 'Please enter a 10-digit phone number so we can call you back.';
+        err.textContent = !name ? 'Please add your name so we know who is texting.' : 'That phone number looks short. Add all 10 digits or leave it blank.';
         err.hidden = false; bad[0].focus(); return;
       }
       var items = $$('input[name=item]:checked', rq).map(function (c) { return c.value; });
-      var fd = new FormData(rq);
-      fd.delete('item'); fd.delete('kind'); fd.delete('zip'); fd.delete('message');
-      fd.set('Job type', rq.querySelector('input[name=kind]:checked').value);
-      fd.set('What needs to go', items.join(', ') || 'Not specified');
-      fd.set('Details', f.message.value.trim() || 'None');
-      fd.set('ZIP or neighborhood', f.zip.value.trim() || 'Not given');
-      btn.disabled = true; btn.firstElementChild.textContent = 'Sending...';
-      fetch('https://formsubmit.co/ajax/swift-junkremoval@outlook.com', {
-        method: 'POST', headers: { Accept: 'application/json' }, body: fd
-      }).then(function (r) { if (!r.ok) throw new Error('bad'); return r.json(); }).then(function () {
-        $('#rqThanks').textContent = 'Thank you, ' + name.split(' ')[0] + '. We have your request.';
-        $('.rq-form', rq).hidden = true; $('#rqDone').hidden = false;
-      }).catch(function () {
-        btn.disabled = false; btn.firstElementChild.textContent = 'Request a call back';
-        err.textContent = 'That did not go through. Please call or text (702) 929-6544 and we will take it from there.';
-        err.hidden = false;
-      });
+      var lines = [
+        'Hi Swift Junk Removal, this is ' + name + '. I would like a quote.',
+        'Job type: ' + rq.querySelector('input[name=kind]:checked').value,
+        'What needs to go: ' + (items.join(', ') || 'Not sure yet')
+      ];
+      if (f.message.value.trim()) lines.push('Details: ' + f.message.value.trim());
+      if (f.zip.value.trim()) lines.push('Area: ' + f.zip.value.trim());
+      if (digits.length >= 10) lines.push('Best number: ' + f.phone.value.trim());
+      var body = lines.join('\n');
+      $('#rqPreview').textContent = body;
+      $('#rqSms').href = smsHref(body);
+      $('#rqThanks').textContent = phoneOn ? 'Your text is ready. Press send.' : 'Copy this and text it to us.';
+      $('#rqHow').innerHTML = phoneOn
+        ? 'Your Messages app should have opened with this typed out. Press <strong>send</strong> to text it to Swift Junk Removal. We do not receive it until you do.'
+        : 'Texting works from a phone. Copy the message below and send it to <strong>(702) 929-6544</strong>, or open this page on your phone. We do not receive anything until you send the text.';
+      rq.classList.toggle('desk', !phoneOn);
+      $('.rq-form', rq).hidden = true; $('#rqDone').hidden = false;
+      rq.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      if (phoneOn) window.location.href = smsHref(body);
     });
+    $('#rqCopy').addEventListener('click', function () {
+      var t = $('#rqPreview').textContent, b = this, done = function () { b.textContent = 'Copied'; setTimeout(function () { b.textContent = 'Copy the message'; }, 2000); };
+      function fallback() {
+        var r = document.createRange(); r.selectNodeContents($('#rqPreview'));
+        var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(r);
+        try { document.execCommand('copy'); done(); } catch (x) {}
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(done, fallback); else fallback();
+    });
+    $('#rqEdit').addEventListener('click', function () { $('#rqDone').hidden = true; $('.rq-form', rq).hidden = false; });
   }
 
   /* what we haul: the photo follows the list */
