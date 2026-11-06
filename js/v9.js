@@ -156,7 +156,7 @@
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !ddPanel.hidden) { ddShut(); ddBtn.focus(); } });
 
     $$('input', rq).forEach(function (i) { i.addEventListener('input', function () { i.classList.remove('bad'); err.hidden = true; }); });
-    var SMS = '+17029296544', phoneOn = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    var SMS = '+17024838279', phoneOn = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
     function smsHref(body) { return 'sms:' + SMS + '?&body=' + encodeURIComponent(body); }
     rq.addEventListener('submit', function (e) {
       e.preventDefault();
@@ -187,7 +187,7 @@
       $('#rqThanks').textContent = phoneOn ? 'Your text is ready. Press send.' : 'Copy this and text it to us.';
       $('#rqHow').innerHTML = phoneOn
         ? 'Your Messages app should have opened with this typed out. Press <strong>send</strong> to text it to Swift Junk Removal. We do not receive it until you do.'
-        : 'Texting works from a phone. Copy the message below and send it to <strong>(702) 929-6544</strong>, or open this page on your phone. We do not receive anything until you send the text.';
+        : 'Texting works from a phone. Copy the message below and send it to <strong>(702) 483-8279</strong>, or open this page on your phone. We do not receive anything until you send the text.';
       rq.classList.toggle('desk', !phoneOn);
       $('.rq-form', rq).hidden = true; $('#rqDone').hidden = false;
       rq.scrollIntoView({ block: 'center', behavior: 'smooth' });
