@@ -469,3 +469,23 @@ html.intro-on{overflow:hidden}
 .rq-tip{font-size:14.5px}
 .rq-edit{font:inherit;font-size:14.5px;font-weight:600;color:var(--muted);background:none;border:0;border-bottom:1.5px solid var(--line);padding:2px 0;cursor:pointer}
 .rq.desk #rqSms,.rq.desk .rq-tip{display:none}
+
+/* request form: dropdown */
+.dd{position:relative;display:flex;flex-direction:column;gap:6px}
+.dd-lab{font-size:13.5px;font-weight:600;color:var(--ink)}
+.dd-btn{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;min-height:48px;font:inherit;font-size:16px;text-align:left;color:var(--muted);background:var(--paper);border:1.5px solid var(--line);border-radius:12px;padding:11px 14px;cursor:pointer;transition:border-color .2s,box-shadow .2s,background .2s}
+.dd-btn:focus-visible,.dd.open .dd-btn{outline:none;border-color:var(--navy);background:#fff;box-shadow:0 0 0 4px rgba(16,28,51,.08)}
+.dd-val{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dd-val.has{color:var(--ink);font-weight:500}
+.dd-btn svg{flex:none;width:20px;height:20px;color:var(--muted);transition:transform .25s var(--ease)}
+.dd.open .dd-btn svg{transform:rotate(180deg)}
+.dd-panel{position:absolute;z-index:20;left:0;right:0;top:calc(100% + 6px);max-height:min(300px,46vh);overflow-y:auto;overscroll-behavior:contain;background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:6px;box-shadow:0 24px 48px -16px rgba(16,28,51,.35)}
+.dd-panel[hidden]{display:none}
+.dd-panel label{display:block;cursor:pointer}
+.dd-panel input{position:absolute;opacity:0;pointer-events:none}
+.dd-panel span{display:flex;align-items:center;gap:12px;min-height:46px;padding:8px 12px;border-radius:10px;font-size:16px;color:var(--ink)}
+.dd-panel span::before{content:"";flex:none;width:20px;height:20px;border-radius:6px;border:1.5px solid #b9c2d0;background:#fff center/14px no-repeat;transition:background-color .2s,border-color .2s}
+.dd-panel label:hover span{background:var(--paper)}
+.dd-panel input:checked+span{font-weight:600}
+.dd-panel input:checked+span::before{background-color:var(--navy);border-color:var(--navy);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5' fill='none' stroke='%23fff' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}
+.dd-panel input:focus-visible+span{outline:2px solid var(--orange);outline-offset:-2px}

@@ -140,6 +140,21 @@
       else if (d.length > 3) o = '(' + d.slice(0, 3) + ') ' + d.slice(3);
       phoneIn.value = o;
     });
+    /* what needs to go: dropdown */
+    var dd = $('#dd'), ddBtn = $('#ddBtn'), ddPanel = $('#ddPanel'), ddVal = $('#ddVal');
+    function ddShut() { ddPanel.hidden = true; ddBtn.setAttribute('aria-expanded', 'false'); dd.classList.remove('open'); }
+    ddBtn.addEventListener('click', function () {
+      var open = ddPanel.hidden;
+      ddPanel.hidden = !open; ddBtn.setAttribute('aria-expanded', String(open)); dd.classList.toggle('open', open);
+    });
+    ddPanel.addEventListener('change', function () {
+      var v = $$('input[name=item]:checked', rq).map(function (c) { return c.value; });
+      ddVal.textContent = v.length ? v.join(', ') : 'Select all that apply';
+      ddVal.classList.toggle('has', v.length > 0);
+    });
+    document.addEventListener('click', function (e) { if (!dd.contains(e.target)) ddShut(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !ddPanel.hidden) { ddShut(); ddBtn.focus(); } });
+
     $$('input', rq).forEach(function (i) { i.addEventListener('input', function () { i.classList.remove('bad'); err.hidden = true; }); });
     var SMS = '+17029296544', phoneOn = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
     function smsHref(body) { return 'sms:' + SMS + '?&body=' + encodeURIComponent(body); }
@@ -161,7 +176,7 @@
         'What needs to go: ' + (items.join(', ') || 'Not sure yet')
       ];
       if (f.message.value.trim()) lines.push('Details: ' + f.message.value.trim());
-      if (f.zip.value.trim()) lines.push('Area: ' + f.zip.value.trim());
+      if (f.address.value.trim()) lines.push('Address: ' + f.address.value.trim());
       if (digits.length >= 10) lines.push('Best number: ' + f.phone.value.trim());
       var body = lines.join('\n');
       $('#rqPreview').textContent = body;
