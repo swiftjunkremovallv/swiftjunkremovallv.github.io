@@ -161,12 +161,15 @@
     rq.addEventListener('submit', function (e) {
       e.preventDefault();
       var f = rq.elements, name = f.name.value.trim(), digits = f.phone.value.replace(/\D/g, '');
-      var bad = [];
+      var bad = [], address = f.address.value.trim();
       if (!name) bad.push(f.name);
-      if (digits.length && digits.length < 10) bad.push(f.phone);
+      if (digits.length < 10) bad.push(f.phone);
+      if (!address) bad.push(f.address);
       if (bad.length) {
         bad.forEach(function (i) { i.classList.add('bad'); });
-        err.textContent = !name ? 'Please add your name so we know who is texting.' : 'That phone number looks short. Add all 10 digits or leave it blank.';
+        err.textContent = bad.length > 1 ? 'Please fill in your name, a 10-digit phone number and the address of the job.'
+          : bad[0] === f.name ? 'Please add your name so we know who is texting.'
+          : bad[0] === f.phone ? 'Please enter a 10-digit phone number.' : 'Please add the address of the job so we can quote it.';
         err.hidden = false; bad[0].focus(); return;
       }
       var items = $$('input[name=item]:checked', rq).map(function (c) { return c.value; });
@@ -175,9 +178,9 @@
         'Job type: ' + rq.querySelector('input[name=kind]:checked').value,
         'What needs to go: ' + (items.join(', ') || 'Not sure yet')
       ];
+      lines.push('Address: ' + address);
+      lines.push('Phone: ' + f.phone.value.trim());
       if (f.message.value.trim()) lines.push('Details: ' + f.message.value.trim());
-      if (f.address.value.trim()) lines.push('Address: ' + f.address.value.trim());
-      if (digits.length >= 10) lines.push('Best number: ' + f.phone.value.trim());
       var body = lines.join('\n');
       $('#rqPreview').textContent = body;
       $('#rqSms').href = smsHref(body);
